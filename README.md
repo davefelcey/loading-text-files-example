@@ -6,21 +6,29 @@ Steps to test;
 
 1. Create Cassandra schema. In the project dir run the following command
 
+```
   cqlsh -f 'src/resources/cql/create_schema.cql'
-  
+```  
+
 2. Build and run the project tests
 
+```
   mvn test
-  
+```
+
 3. View the inserted XML file and extracted file details. Using cqlsh run the following CQL commands
 
   To output the extracted values in the details table enter
   
+```sql
     select * from test.details
-  
+```
+
   To see the XML file contents enter
   
+```sql 
     select data from test.text_data
+```
     
 4. Look at the XML file size on the filesystem, it should be 345,116 bytes. Run the "nodetool flush" command 
    to persist all memtable records to disk. Then run "nodetool cfstats test.text_data" to output details about 
