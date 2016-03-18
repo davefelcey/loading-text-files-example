@@ -35,7 +35,7 @@ the compression ratio for the table text_data
    
 The 101 records persisted to disk are compressed because LZ4 compression has been specified
 for the text_date table. The compression ratio should be about 0.11, in other words they are only taking
-up have 11% of their origional size.
+up 11% of their origional size.
    
 **Note:** compression ratios will vary depending on the file contents
 
