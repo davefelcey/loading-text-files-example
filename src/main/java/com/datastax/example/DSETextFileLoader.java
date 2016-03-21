@@ -52,20 +52,23 @@ public class DSETextFileLoader {
     }
 
     public void storeText(ByteBuffer textData, String id) {
-        session.execute("INSERT INTO test.text_data ( id, data) values ( ?, ? )", id, textData);
+        session.execute("INSERT INTO test.text_data ( id, data ) values ( ?, ? )", id, textData);
     }
 
     public ByteBuffer getText(String id) throws UnsupportedEncodingException {
         ResultSet rows = session.execute("SELECT data FROM test.text_data WHERE id = ?", id);
         List<ByteBuffer> buffers = new ArrayList<ByteBuffer>();
+
         for (Row row : rows) {
             buffers.add(ByteBuffer.wrap(row.getString("data").getBytes("UTF-8")));
         }
+
         if (buffers.size() == 1) {
             return buffers.get(0);
         } else if (buffers.size() > 1) {
             throw new RuntimeException("More than one matching text data for id '" + id + "' found");
         }
+
         throw new RuntimeException("None matching text data for id '" + id + "' found");
     }
 
@@ -76,11 +79,11 @@ public class DSETextFileLoader {
 
     // File handling functions
 
-    public void write(String location, ByteBuffer blob) throws IOException {
-        ByteBuffer buf = ByteBuffer.allocate(blob.limit());
+    public void write(String location, ByteBuffer data) throws IOException {
+        ByteBuffer buf = ByteBuffer.allocate(data.limit());
         int n = 0;
         buf.clear();
-        buf.put(blob);
+        buf.put(data);
         buf.flip();
 
         RandomAccessFile file = new RandomAccessFile(location, "rw");

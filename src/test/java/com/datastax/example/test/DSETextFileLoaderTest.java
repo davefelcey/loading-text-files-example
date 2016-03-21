@@ -38,23 +38,23 @@ public class DSETextFileLoaderTest {
         ByteBuffer input = fileLoader.read(textFile);
         fileLoader.storeText(input, Integer.toString(999));
         List<DSETextFileLoader.Tuple> values = fileLoader.parseXML(input);
-        String cql = "INSERT INTO test.details ( reg_num, title, building ) values ( ?, ?, ? )";
+        String cql = "INSERT INTO test.details ( id, name, description ) values ( ?, ?, ? )";
         String regNum = null;
         String title = "";
         String building = "";
 
         for(int i = 0; i < values.size(); i++) {
             DSETextFileLoader.Tuple t = values.get(i);
-            if(t.name.equals("reg_num")) {
+            if(t.name.equals("id")) {
                 if (regNum == null) {
                     regNum = t.value;
                 } else {
                     fileLoader.storeDetails(cql, regNum, title, building);
                     regNum = null;
                 }
-            } else if(t.name.equals("title")) {
+            } else if(t.name.equals("name")) {
                 title = t.value;
-            } else if(t.name.equals("building")) {
+            } else if(t.name.equals("description")) {
                 building = t.value;
             } else {
                 throw new RuntimeException("Name not expected: " + t.name);
