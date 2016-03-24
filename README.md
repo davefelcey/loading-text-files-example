@@ -10,10 +10,22 @@ Create Cassandra schema. In the project dir run the following command
   cqlsh -f 'src/resources/cql/create_schema.cql'
   ```
 
+To start the web server, in another terminal run 
+
+```
+	mvn jetty:run
+```
+
 Build and run the project tests
 
   ```
   mvn test
+  ```
+
+To add an XML document from the command line run the command
+
+  ```
+  curl -X POST http://localhost:8080/loading-xm-example/rest/addXML
   ```
 
 View the inserted XML file and extracted file details. Using cqlsh run the following CQL commands
@@ -21,12 +33,12 @@ View the inserted XML file and extracted file details. Using cqlsh run the follo
 To output the extracted values in the details table enter
 
   ```sql
-  select * from test.details
+  select * from test.xml_details
   ```
 To see the XML file contents enter
   
   ```sql 
-  select data from test.text_data
+  select data from test.xml_data
   ```
     
 Look at the XML file size on the filesystem, it should be 345,116 bytes. Run the "nodetool flush" command 
