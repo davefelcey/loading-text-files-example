@@ -19,6 +19,10 @@ public class DSEXMLLoaderService {
         xmlLoader = new DSEXMLLoader();
     }
 
+    public void shutdown() {
+        xmlLoader.shutDown();
+    }
+
     public void loadXMLAndDetails(String xmlData, String key) throws IOException, XPathExpressionException, XPathFactoryConfigurationException, ParserConfigurationException, SAXException {
         // Load XML
         xmlLoader.storeXML(xmlData, key);

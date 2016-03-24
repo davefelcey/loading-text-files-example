@@ -14,10 +14,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactoryConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 /**
  * Created by davidfelcey on 14/03/2016.
@@ -60,8 +58,6 @@ public class DSEXMLLoaderTest {
 
     @org.junit.Test
     public void loadXMLFileTest() throws ClassNotFoundException, IOException {
-        DSEXMLLoader fileLoader = new DSEXMLLoader();
-
         try {
             String input = fileLoader.read(getTestFile());
             fileLoader.storeXML(input, DOC_ID);
