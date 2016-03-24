@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -54,7 +55,7 @@ public class DSEXMLLoaderTest {
         service.loadXMLAndDetails(input, DOC_ID);
         String output = fileLoader.getXML(DOC_ID);
 
-        // assertSame(output, input);
+        assertEquals(output, input);
     }
 
     @org.junit.Test
@@ -66,7 +67,7 @@ public class DSEXMLLoaderTest {
             fileLoader.storeXML(input, DOC_ID);
             String output = fileLoader.getXML(DOC_ID);
 
-            // assertSame(output, input);
+            assertEquals(output, input);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -75,31 +76,29 @@ public class DSEXMLLoaderTest {
     }
 
     @org.junit.Test
-    public void loadXMLViaRESTTest() throws IOException {
-        String input = fileLoader.read(getTestFile());
+    public void loadXMLRESTTest() throws IOException {
         final String BASE_URI = "http://localhost:8080/loading-xml-example/rest/";
         ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
-        String output = null;
         Client client = Client.create(config);
-        WebResource webResource = client.resource(BASE_URI).path("addXML");
 
         // Post
-        webResource.header(DSEXMLLoaderWS.HEADER_ID, DOC_ID).type(javax.ws.rs.core.MediaType.APPLICATION_XML).post(String.class, input);
+        String input = fileLoader.read(getTestFile());
+        WebResource postWebResource = client.resource(BASE_URI).path("addXML");
+        postWebResource.header(DSEXMLLoaderWS.HEADER_ID, DOC_ID).type(javax.ws.rs.core.MediaType.APPLICATION_XML).post(String.class, input);
 
         // Get
-        ClientResponse response = webResource.accept(javax.ws.rs.core.MediaType.APPLICATION_XML).get(ClientResponse.class);
+        WebResource getWebResource = client.resource(BASE_URI).path("getXML").queryParam(DSEXMLLoaderWS.PARAM_ID, DOC_ID);
+        ClientResponse response = getWebResource.accept(javax.ws.rs.core.MediaType.APPLICATION_XML).get(ClientResponse.class);
+        String output = null;
 
-        if (response.getStatus() != ClientResponse.Status.ACCEPTED.getStatusCode()) {
+        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
             throw new RuntimeException("Failed : HTTP error code : "
                     + response.getStatus());
         } else {
             output = response.getEntity(String.class);
         }
 
-        fileLoader.write(System.getProperty("user.dir") + File.separator + "input.xml", input);
-        fileLoader.write(System.getProperty("user.dir") + File.separator + "output.xml", output);
-
-        // assertSame(output, input);
+        assertEquals(output, input);
 
         // Clean up
         client.destroy();

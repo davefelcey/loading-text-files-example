@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public class DSEXMLLoaderWS {
     public static final String HEADER_ID = "DOC-ID";
+    public static final String PARAM_ID = "id";
     private static final Logger logger = LoggerFactory.getLogger(DSEXMLLoaderWS.class);
     private DSEXMLLoaderService service = new DSEXMLLoaderService();
 
@@ -24,6 +25,7 @@ public class DSEXMLLoaderWS {
         try {
             service.loadXMLAndDetails(data, id);
         } catch (Exception e) {
+            logger.warn("Could not add data", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.ok("success").build();
@@ -32,7 +34,7 @@ public class DSEXMLLoaderWS {
     @GET
     @Path("/getXML")
     @Produces(MediaType.APPLICATION_XML)
-    public Response getXML(@QueryParam("id") String id) {
+    public Response getXML(@QueryParam(PARAM_ID) String id) {
         String data = null;
 
         logger.debug("Request Id: " + id);
@@ -40,10 +42,12 @@ public class DSEXMLLoaderWS {
             data = service.getXML(id);
             logger.debug("XML size is: " + data.length());
         } catch (Exception e) {
+            logger.warn("Could not get data", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
         if (data == null) {
+            logger.debug("No data found");
             return Response.noContent().build();
         } else {
             return Response.ok(data, MediaType.APPLICATION_XML_TYPE).build();

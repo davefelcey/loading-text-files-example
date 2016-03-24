@@ -25,7 +25,7 @@ Build and run the project tests
 To add an XML document from the command line run the command
 
   ```
-  curl -X POST http://localhost:8080/loading-xm-example/rest/addXML
+  curl -v -H "Content-Type: application/xml" -H "DOC-ID: 003" -d @sample.xml http://localhost:8080/loading-xml-example/rest/addXML
   ```
 
 View the inserted XML file and extracted file details. Using cqlsh run the following CQL commands
