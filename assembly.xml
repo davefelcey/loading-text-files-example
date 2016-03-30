@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>spark-job</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>target/classes</directory>
+            <includes>
+                <include>com/datastax/example/*.class</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <!--
+            <excludes>
+                <exclude>io.netty:netty-transport-native-epoll</exclude>
+            </excludes>
+            <excludes>
+                <exclude>org.apache.hadoop:2.2.0</exclude>
+            </excludes>
+            <includes>
+                <include>com.databricks:spark-xml_2.11:0.3.2</include>
+            </includes>
+            -->
+        </dependencySet>
+    </dependencySets>
+</assembly>

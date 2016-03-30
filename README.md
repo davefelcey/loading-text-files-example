@@ -51,4 +51,14 @@ up 11% of their origional size.
    
 **Note:** compression ratios will vary depending on the file contents
 
+To run the Spark job first build the Jar;
 
+ ```
+  mvn test
+  ```
+  
+Then execute the command
+
+  ```
+  dse -u cassandra -p cassandra spark-submit --packages com.databricks:spark-xml_2.10:0.3.2 --class com.datastax.example.DSESparkExample --master spark://127.0.0.1:7077 target/loading-xml-app-spark-job.jar spark://127.0.0.1:7077 127.0.0.1
+  ```

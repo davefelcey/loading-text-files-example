@@ -71,7 +71,7 @@ public class DSEXMLLoaderTest {
         }
     }
 
-    @org.junit.Test
+    // @org.junit.Test
     public void loadXMLRESTTest() throws IOException {
         final String BASE_URI = "http://localhost:8080/loading-xml-example/rest/";
         ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
