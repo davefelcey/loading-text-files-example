@@ -21,7 +21,9 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -55,7 +57,7 @@ public class DSEXMLLoader {
     }
 
     public void storeXML(String xmlData, String id) {
-        session.execute("INSERT INTO test.xml_data ( doc_id, data ) values ( ?, ? )", id, xmlData);
+        session.execute("INSERT INTO test.xml_data ( doc_id, created, data ) values ( ?, ?, ? )", id, new Date(), xmlData);
     }
 
     public String getXML(String id) throws UnsupportedEncodingException {

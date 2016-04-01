@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
  * Created by davidfelcey on 14/03/2016.
  */
 public class DSEXMLLoaderTest {
-    private static final String DOC_ID = "001";
+    public static final String DOC_ID = "sample.xml";
     private DSEXMLLoader fileLoader = null;
 
     private String getTestFile() {
@@ -71,9 +71,9 @@ public class DSEXMLLoaderTest {
         }
     }
 
-    // @org.junit.Test
+    @org.junit.Test
     public void loadXMLRESTTest() throws IOException {
-        final String BASE_URI = "http://localhost:8080/loading-xml-example/rest/";
+        final String BASE_URI = "http://localhost:8080/xml-app/rest/";
         ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
         Client client = Client.create(config);
 

@@ -6,6 +6,7 @@ import org.apache.spark.SparkContext;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SQLContext;
+import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.cassandra.CassandraSQLContext;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
@@ -19,14 +20,14 @@ import java.util.HashMap;
  * Created by davidfelcey on 29/03/2016.
  */
 public class DSESparkExample {
-    public static void CassandraTest(SparkContext sc) {
+    public static void CassandraTest(SparkContext sc, String docId) {
         CassandraSQLContext sqlContext = new CassandraSQLContext(sc);
-        DataFrame df = sqlContext.sql("SELECT data FROM test.xml_data");
+        DataFrame df = sqlContext.sql("SELECT data FROM test.xml_data where doc_id = '" + docId + "'");
         df.show();
     }
 
-    public static void XMLTest(SparkContext sc) {
-        String filePath = "file://" + System.getProperty("user.dir") + File.separator + "sample.xml";
+    public static void XMLTest(SparkContext sc, String fileName) {
+        String filePath = "file://" + System.getProperty("user.dir") + File.separator + fileName;
         SQLContext sqlContext = new SQLContext(sc);
         HashMap<String, String> options = new HashMap<String, String>();
         options.put("rowTag", "course");
@@ -42,10 +43,9 @@ public class DSESparkExample {
         System.out.println("Result: " + result);
     }
 
-    public static void LoadDetails(SparkContext sc) {
+    public static void LoadDetails(SparkContext sc, String docId) {
         // Get XML
-        final String DOC_ID = "999";
-        String filePath = "file://" + System.getProperty("user.dir") + File.separator + "sample.xml";
+        String filePath = "file://" + System.getProperty("user.dir") + File.separator + docId;
         SQLContext xmlSqlContext = new SQLContext(sc);
         StructType customSchema = new StructType(new StructField[] {
                 new StructField("doc_id", DataTypes.StringType, true, Metadata.empty()),
@@ -66,20 +66,21 @@ public class DSESparkExample {
 
         final DataFrame xmlDFWithDocId;
         xmlDFWithDocId = xmlSqlContext.createDataFrame(df.javaRDD().map(row -> {
-            return RowFactory.create(DOC_ID, row.get(0), row.get(1), row.get(2));
+            return RowFactory.create(docId, row.get(0), row.get(1), row.get(2));
         }), customSchema);
 
         System.out.println("Updated XML DataFrame");
         xmlDFWithDocId.show(10);
 
         // Load into details table
-        xmlDFWithDocId.write().format("org.apache.spark.sql.cassandra")
+        xmlDFWithDocId.write().mode(SaveMode.Append).format("org.apache.spark.sql.cassandra")
                 .option("keyspace", "test")
                 .option("table", "xml_details")
                 .save();
     }
 
     public static void main(String [] args) {
+        String docId = "sample.xml";
         SparkConf conf = new SparkConf(true)
                 .setAppName("My application")
                 .set("spark.driver.allowMultipleContexts", "true")
@@ -88,8 +89,8 @@ public class DSESparkExample {
                 .set("spark.cassandra.connection.host", "127.0.0.1");
         SparkContext sc = new SparkContext(conf);
 
-        CassandraTest(sc);
-        XMLTest(sc);
-        LoadDetails(sc);
+        CassandraTest(sc, docId);
+        XMLTest(sc, docId);
+        LoadDetails(sc, docId);
     }
 }

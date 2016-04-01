@@ -7,7 +7,8 @@ WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 2};
 // Create table for text data
 CREATE TABLE IF NOT EXISTS test.xml_data (
    doc_id text PRIMARY KEY,
-   data  text
+   created timestamp,
+   data text
 ) WITH compression = { 'sstable_compression' : 'LZ4Compressor' };
 
 CREATE TABLE IF NOT EXISTS test.xml_details (

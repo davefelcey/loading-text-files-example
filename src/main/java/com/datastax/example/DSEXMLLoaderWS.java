@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public class DSEXMLLoaderWS {
     public static final String HEADER_ID = "DOC-ID";
-    public static final String PARAM_ID = "id";
+    public static final String PARAM_ID = "ID";
     private static final Logger logger = LoggerFactory.getLogger(DSEXMLLoaderWS.class);
     private DSEXMLLoaderService service = new DSEXMLLoaderService();
 
@@ -28,7 +28,7 @@ public class DSEXMLLoaderWS {
             logger.warn("Could not add data", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        return Response.ok("success").build();
+        return Response.ok().build();
     }
 
     @GET
