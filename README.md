@@ -69,7 +69,7 @@ up 11% of their origional size.
 There is a simple performance testing script;
 
   ```
-  pert-test.sh
+  perf-test.sh
   ```
   
 This issues a number of HTTP requests using curl
