@@ -16,4 +16,14 @@
             <outputDirectory>/</outputDirectory>
         </fileSet>
     </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <unpack>true</unpack>
+            <scope>runtime</scope>
+            <includes>
+                <include>com.ximpleware</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
 </assembly>
